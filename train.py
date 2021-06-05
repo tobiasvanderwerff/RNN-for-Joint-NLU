@@ -45,7 +45,9 @@ def cross_validate(config, k=10):
     print("===================================================")
     print(str(k) + "-fold cross validation complete. Average scores:")
     print("Tag F1 score: ", np.mean(all_f1_tag_score), 
-          ", intent accuracy: ", np.mean(all_intent_accuracy))
+          "+-", np.std(all_f1_tag_score),
+          ", intent accuracy: ", np.mean(all_intent_accuracy),
+          "+-", np.std(all_intent_accuracy))
     print("===================================================")
 
 def train(config, train_data=None, validation_data=None, test_data=None, 
