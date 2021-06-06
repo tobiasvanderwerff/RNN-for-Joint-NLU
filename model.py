@@ -7,6 +7,93 @@ from torchcrf import CRF
 
 USE_CUDA = torch.cuda.is_available()
 
+class BiRNN(nn.Module):
+    def __init__(self, slot_size, intent_size, input_size, embedding_size, hidden_size, batch_size=16 ,n_layers=1, dropout_p =0.1, attention_bool = True):
+        super(BiRNN, self).__init__()
+        
+        self.slot_size = slot_size
+        self.intent_size = intent_size
+        self.input_size = input_size
+        self.embedding_size = embedding_size
+        self.hidden_size = hidden_size
+        self.n_layers = n_layers
+        self.batch_size = batch_size
+        self.dropout_p = dropout_p
+        self.attention_bool = attention_bool
+
+        self.embedding = nn.Embedding(input_size, embedding_size)
+        self.lstm = nn.LSTM(self.embedding_size, self.hidden_size, self.n_layers, batch_first = True, bidirectional=True)
+
+        self.slot_out = nn.Linear(self.hidden_size*4, self.slot_size)
+        self.intent_out = nn.Linear(self.hidden_size*4, self.intent_size)
+        self.attention_layer = nn.Linear(self.hidden_size * 2, 1) 
+
+    def init_weights(self):
+        self.embedding.weight.data.uniform_(-0.1, 0.1) # what weights should it be initialized to?
+
+    def init_hidden(self, input):
+        hidden = Variable(torch.zeros(self.n_layers*2, input.size(0), self.hidden_size)).cuda() if USE_CUDA else Variable(torch.zeros(self.n_layers*2, input.size(0), self.hidden_size))
+        context = Variable(torch.zeros(self.n_layers*2, input.size(0), self.hidden_size)).cuda() if USE_CUDA else Variable(torch.zeros(self.n_layers*2, input.size(0), self.hidden_size))
+        return (hidden,context)
+
+    def Attention(self, LSTM_hidden, mask):
+        # steps:
+        # 1. Get LSTM hidden states
+        # 2. pass through linear layer
+        # 3. apply softmax -> attn_weights
+        # 4. multiply Lstm hidden states by attention weights
+        # 5. return context vector
+
+        attn_in = LSTM_hidden
+        attn_out = self.attention_layer(attn_in)
+
+        attn_weights = F.softmax(attn_out, dim = 1)
+        attn_weights = attn_weights.squeeze(-1)
+        attn_weights = attn_weights.masked_fill(mask,-1e12) # mask the PAD tokens
+
+        context = torch.sum(attn_weights.unsqueeze(-1) * LSTM_hidden, dim = 1, keepdim=False)
+        
+        return context 
+
+    def forward(self, input, mask):
+        '''
+        input = Batch_size, Seq_len
+        '''
+        init_hidden = self.init_hidden(input) # only for input size
+        embedded = self.embedding(input)
+        max_len = input.size(1)
+
+        real_lengths = []
+
+        for i in range(mask.size(0)):
+            real_lengths.append(mask[i].data.tolist().count(False))
+
+        # pack_padded_sequence so that padded items in the sequence won't be shown to the LSTM
+        embedded = torch.nn.utils.rnn.pack_padded_sequence(embedded, real_lengths, batch_first=True, enforce_sorted = False)
+
+        # now run through LSTM
+        hiddens, (h0, c0) = self.lstm(embedded, init_hidden)
+
+        # undo the packing operation
+        hiddens, _ = torch.nn.utils.rnn.pad_packed_sequence(hiddens, batch_first=True, total_length = max_len)
+
+        # hiddens shape: B,T,D
+
+        context = self.Attention(hiddens, mask)
+        context = context.unsqueeze(1) # B,D => B,1,D
+        context = context.repeat_interleave(max_len, dim = 1) # B,1,D => B,T,D; repeat the context vector for each hidden state
+
+        hiddens_and_context = torch.cat((context, hiddens), dim = -1)
+
+        slot_scores = self.slot_out(hiddens_and_context)
+        slot_scores = F.log_softmax(slot_scores, dim=1)
+        slot_scores = slot_scores.view(input.size(0) * input.size(1), -1)
+
+        intent_input = torch.mean(hiddens_and_context, dim = 1) # mean-pooling of the hidden states over seq_len
+        intent_scores = self.intent_out(intent_input)
+
+        return slot_scores, intent_scores
+
 class Encoder(nn.Module):
     def __init__(self, input_size,embedding_size, hidden_size,batch_size=16 ,n_layers=1):
         super(Encoder, self).__init__()
