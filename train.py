@@ -62,9 +62,10 @@ def train(config, train_data=None, validation_data=None, test_data=None,
 
     if train_data is None and validation_data is None:
         train_data, word2index, tag2index, intent2index = preprocessing(config.file_path, config.max_length)
-        validation_data, _, _, _ = preprocessing(config.validation_set_file_path, config.max_length, word2index, tag2index, intent2index)
+        if config.validation_set_file_path:
+            validation_data, _, _, _ = preprocessing(config.validation_set_file_path, config.max_length, word2index, tag2index, intent2index)
         test_data, _, _, _ = preprocessing(config.test_set_file_path, config.max_length, word2index, tag2index, intent2index)
-        if train_data is None or validation_data is None or test_data is None:
+        if train_data is None or test_data is None:
             print("Please check your data or its path")
             return
 
@@ -114,9 +115,10 @@ def train(config, train_data=None, validation_data=None, test_data=None,
             enc_optim.step()
             dec_optim.step()
             if i % 100==0:
-                eval_losses, f1_tag_score, intent_accuracy = evaluate(encoder, decoder, word2index, validation_data, config.batch_size)
-                print("Step", step, " epoch", i, ". train_loss: ",
-                      np.mean(losses), "eval_loss: ", np.mean(eval_losses), ", tag F1 score: ",
+                print("Step", step, " epoch", i, ". train_loss: ", np.mean(losses))
+                if validation_data:
+                    eval_losses, f1_tag_score, intent_accuracy = evaluate(encoder, decoder, word2index, validation_data, config.batch_size)
+                    print("eval_loss: ", np.mean(eval_losses), ", tag F1 score: ",
                       f1_tag_score, ", intent accuracy: ", intent_accuracy)
                 losses=[]
 
@@ -142,9 +144,9 @@ def train(config, train_data=None, validation_data=None, test_data=None,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file_path', type=str, default='./data/atis-2.train.w-intent.iob' ,
+    parser.add_argument('--file_path', type=str, default='./data/atis.train.w-intent.iob' ,
                         help='path to the train data')
-    parser.add_argument('--validation_set_file_path', type=str, default='./data/atis-2.dev.w-intent.iob' ,
+    parser.add_argument('--validation_set_file_path', type=str,
                         help='path to the validation data')
     parser.add_argument('--test_set_file_path', type=str, default='./data/atis.test.w-intent.iob' ,
                         help='path to the test data')
@@ -163,7 +165,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_layers', type=int , default=1 ,
                         help='number of layers in lstm')
 
-    parser.add_argument('--step_size', type=int, default=5)
+    parser.add_argument('--step_size', type=int, default=15)
     parser.add_argument('--batch_size', type=int, default=16)
     parser.add_argument('--learning_rate', type=float, default=0.001)
     parser.add_argument('--random_seed', type=int, default=1337)
