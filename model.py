@@ -59,7 +59,7 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     
-    def __init__(self,slot_size,intent_size,embedding_size,hidden_size,batch_size=16,n_layers=1,dropout_p=0.1):
+    def __init__(self,slot_size,intent_size,embedding_size,hidden_size,batch_size=16,n_layers=1,dropout_p=0.5):
         super(Decoder, self).__init__()
         
         self.hidden_size = hidden_size
@@ -157,7 +157,7 @@ class Decoder(nn.Module):
 
 
 class CRFDecoder(nn.Module):
-    def __init__(self, slot_size, intent_size, hidden_size, batch_size=16, n_layers=1):
+    def __init__(self, slot_size, intent_size, hidden_size, batch_size=16, n_layers=1, dropout_p=0.5):
         super(CRFDecoder, self).__init__()
 
         self.hidden_size = hidden_size
@@ -167,11 +167,20 @@ class CRFDecoder(nn.Module):
         self.batch_size = batch_size
 
         # Define the layers
+        self.dropout = nn.Dropout(dropout_p)
         self.lstm = nn.LSTM(self.hidden_size*2, self.hidden_size, self.n_layers, batch_first=True)
         self.attn = nn.Linear(self.hidden_size,self.hidden_size) # Attention
         self.slot_out = nn.Linear(self.hidden_size*2, self.slot_size)
         self.intent_out = nn.Linear(self.hidden_size*2,self.intent_size)
         self.crf = CRF(self.slot_size)
+
+        # Set forget gate bias of LSTM to 1
+        for names in self.lstm._all_weights:
+            for name in filter(lambda n: "bias" in n, names):
+                bias = getattr(self.lstm, name)
+                n = bias.size(0)
+                start, end = n // 4, n // 2
+                bias.data[start:end].fill_(1.)
 
     def Attention(self, hidden, encoder_outputs, encoder_maskings):
         """
@@ -211,10 +220,10 @@ class CRFDecoder(nn.Module):
                 intent_hidden = hidden[0].clone()
                 intent_context = self.Attention(intent_hidden, encoder_outputs, encoder_maskings)
                 concated = torch.cat((intent_hidden, intent_context.transpose(0, 1)), 2)  # 1,B,D
-                intent_score = self.intent_out(concated.squeeze(0))  # B,D
+                intent_score = self.intent_out(self.dropout(concated.squeeze(0))) # B,D
 
             concated = torch.cat((hidden[0], context.transpose(0, 1)), 2)
-            score = self.slot_out(concated.squeeze(0))
+            score = self.slot_out(self.dropout(concated.squeeze(0)))
             emissions.append(score)
 
             # 그 다음 Context Vector를 Attention으로 계산
