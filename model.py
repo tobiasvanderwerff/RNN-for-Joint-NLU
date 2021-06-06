@@ -19,6 +19,13 @@ class Encoder(nn.Module):
         
         self.embedding = nn.Embedding(input_size, embedding_size)
         self.lstm = nn.LSTM(embedding_size, hidden_size, n_layers, batch_first=True,bidirectional=True)
+        # Set forget gate bias of LSTM to 1
+        for names in self.lstm._all_weights:
+            for name in filter(lambda n: "bias" in n, names):
+                bias = getattr(self.lstm, name)
+                n = bias.size(0)
+                start, end = n // 4, n // 2
+                bias.data[start:end].fill_(1.)
     
     def init_weights(self):
         self.embedding.weight.data.uniform_(-0.1, 0.1)
@@ -66,11 +73,18 @@ class Decoder(nn.Module):
         # Define the layers
         self.embedding = nn.Embedding(self.slot_size, self.embedding_size) #TODO encoder와 공유하도록 하고 학습되지 않게..
 
-        #self.dropout = nn.Dropout(self.dropout_p)
+        self.dropout = nn.Dropout(self.dropout_p)
         self.lstm = nn.LSTM(self.embedding_size+self.hidden_size*2, self.hidden_size, self.n_layers, batch_first=True)
         self.attn = nn.Linear(self.hidden_size,self.hidden_size) # Attention
         self.slot_out = nn.Linear(self.hidden_size*2, self.slot_size)
         self.intent_out = nn.Linear(self.hidden_size*2,self.intent_size)
+        # Set forget gate bias of LSTM to 1
+        for names in self.lstm._all_weights:
+            for name in filter(lambda n: "bias" in n, names):
+                bias = getattr(self.lstm, name)
+                n = bias.size(0)
+                start, end = n // 4, n // 2
+                bias.data[start:end].fill_(1.)
     
     def init_weights(self):
         self.embedding.weight.data.uniform_(-0.1, 0.1)
@@ -126,10 +140,10 @@ class Decoder(nn.Module):
                 intent_hidden = hidden[0].clone() 
                 intent_context = self.Attention(intent_hidden, encoder_outputs,encoder_maskings) 
                 concated = torch.cat((intent_hidden,intent_context.transpose(0,1)),2) # 1,B,D
-                intent_score = self.intent_out(concated.squeeze(0)) # B,D
+                intent_score = self.intent_out(self.dropout(concated.squeeze(0))) # B,D
 
             concated = torch.cat((hidden[0],context.transpose(0,1)),2)
-            score = self.slot_out(concated.squeeze(0))
+            score = self.slot_out(self.dropout(concated.squeeze(0)))
             softmaxed = F.log_softmax(score, dim=1)
             decode.append(softmaxed)
             _,input = torch.max(softmaxed,1)
