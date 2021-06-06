@@ -19,11 +19,13 @@ def evaluate_predictions(tag_truths, tag_predictions, intent_truths, intent_pred
     return f1_tag_score, intent_accuracy
 
 
-def evaluate(encoder, decoder, word2index, data, batch_size):
+def evaluate(biRNN, word2index, data, batch_size): # encoder, decoder,
     use_cuda = torch.cuda.is_available()
 
-    encoder.eval()
-    decoder.eval()
+    #encoder.eval()
+    #decoder.eval()
+    biRNN.eval()
+
     tag_truths = []
     tag_predictions = []
 
@@ -46,11 +48,12 @@ def evaluate(encoder, decoder, word2index, data, batch_size):
             x_mask = torch.cat([torch.tensor(tuple(map(lambda s: s == 0, t.data)), dtype=torch.bool) for t in x])
             x_mask = x_mask.view(batch_size, -1)
 
-            output, hidden_c = encoder(x, x_mask)
-            start_decode = Variable(torch.LongTensor([[word2index['<SOS>']] * batch_size])).cuda().transpose(1, 0) \
-                if use_cuda else Variable(torch.LongTensor([[word2index['<SOS>']] * batch_size])).transpose(1, 0)
+            #output, hidden_c = encoder(x, x_mask)
+            #start_decode = Variable(torch.LongTensor([[word2index['<SOS>']] * batch_size])).cuda().transpose(1, 0) \
+                # if use_cuda else Variable(torch.LongTensor([[word2index['<SOS>']] * batch_size])).transpose(1, 0)
 
-            tag_score, intent_score = decoder(start_decode, hidden_c, output, x_mask)
+            #tag_score, intent_score = decoder(start_decode, hidden_c, output, x_mask)
+            tag_score, intent_score = biRNN(x, x_mask)
 
             loss_1 = loss_function_1(tag_score,tag_target.view(-1))
             loss_2 = loss_function_2(intent_score,intent_target)
@@ -69,8 +72,9 @@ def evaluate(encoder, decoder, word2index, data, batch_size):
             intent_predictions.append(predicted_intent_indices.cpu())
 
     f1_tag_score, intent_accuracy = evaluate_predictions(tag_truths, tag_predictions, intent_truths, intent_predictions)
-    encoder.train()
-    decoder.train()
+    #encoder.train()
+    #decoder.train()
+    biRNN.train()
     return losses, f1_tag_score, intent_accuracy
 
 

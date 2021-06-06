@@ -10,7 +10,7 @@ import argparse
 import numpy as np
 from sklearn.model_selection import KFold
 from data import *
-from model import Encoder,Decoder
+from model import Encoder,Decoder, BiRNN
 from evalutate import evaluate
 from util import set_seed
 
@@ -69,19 +69,24 @@ def train(config, train_data=None, validation_data=None, test_data=None,
             print("Please check your data or its path")
             return
 
-    encoder = Encoder(len(word2index),config.embedding_size,config.hidden_size)
-    decoder = Decoder(len(tag2index),len(intent2index),len(tag2index)//3,config.hidden_size*2)
-    if USE_CUDA:
-        encoder = encoder.cuda()
-        decoder = decoder.cuda()
+    #encoder = Encoder(len(word2index),config.embedding_size,config.hidden_size)
+    #decoder = Decoder(len(tag2index),len(intent2index),len(tag2index)//3,config.hidden_size*2)
+    biRNN = BiRNN(len(tag2index), len(intent2index), len(word2index), config.embedding_size, config.hidden_size)
 
-    encoder.init_weights()
-    decoder.init_weights()
+    if USE_CUDA:
+        #encoder = encoder.cuda()
+        #decoder = decoder.cuda()
+        biRNN = biRNN.cuda()
+
+    #encoder.init_weights()
+    #decoder.init_weights()
+    biRNN.init_weights()
 
     loss_function_1 = nn.CrossEntropyLoss(ignore_index=0)
     loss_function_2 = nn.CrossEntropyLoss()
-    enc_optim= optim.Adam(encoder.parameters(), lr=config.learning_rate)
-    dec_optim = optim.Adam(decoder.parameters(),lr=config.learning_rate)
+    #enc_optim= optim.Adam(encoder.parameters(), lr=config.learning_rate)
+    #dec_optim = optim.Adam(decoder.parameters(),lr=config.learning_rate)
+    biRNN_optim = optim.Adam(biRNN.parameters(),lr=config.learning_rate)
 
     for step in range(config.step_size):
         losses=[]
@@ -94,13 +99,15 @@ def train(config, train_data=None, validation_data=None, test_data=None,
             x_mask = torch.cat([torch.tensor(tuple(map(lambda s: s ==0, t.data)), dtype=torch.bool) for t in x])
             x_mask = x_mask.view(config.batch_size,-1)
 
-            encoder.zero_grad()
-            decoder.zero_grad()
+            #encoder.zero_grad()
+            #decoder.zero_grad()
+            biRNN.zero_grad()
 
-            output, hidden_c = encoder(x,x_mask)
-            start_decode = Variable(torch.LongTensor([[word2index['<SOS>']]*config.batch_size])).cuda().transpose(1,0) if USE_CUDA else Variable(torch.LongTensor([[word2index['<SOS>']]*config.batch_size])).transpose(1,0)
+            #output, hidden_c = encoder(x,x_mask)
+            #start_decode = Variable(torch.LongTensor([[word2index['<SOS>']]*config.batch_size])).cuda().transpose(1,0) if USE_CUDA else Variable(torch.LongTensor([[word2index['<SOS>']]*config.batch_size])).transpose(1,0)
 
-            tag_score, intent_score = decoder(start_decode,hidden_c,output,x_mask)
+            #tag_score, intent_score = decoder(start_decode,hidden_c,output,x_mask)
+            tag_score, intent_score = biRNN(x, x_mask)
 
             loss_1 = loss_function_1(tag_score,tag_target.view(-1))
             loss_2 = loss_function_2(intent_score,intent_target)
@@ -109,11 +116,13 @@ def train(config, train_data=None, validation_data=None, test_data=None,
             losses.append(loss.data.cpu().numpy().item() if USE_CUDA else loss.data.numpy().item())
             loss.backward()
 
-            torch.nn.utils.clip_grad_norm_(encoder.parameters(), 5.0)
-            torch.nn.utils.clip_grad_norm_(decoder.parameters(), 5.0)
+            torch.nn.utils.clip_grad_norm_(biRNN.parameters(), 5.0)
+            #torch.nn.utils.clip_grad_norm_(encoder.parameters(), 5.0)
+            #torch.nn.utils.clip_grad_norm_(decoder.parameters(), 5.0)
 
-            enc_optim.step()
-            dec_optim.step()
+            #enc_optim.step()
+            #dec_optim.step()
+            biRNN_optim.step()
             if i % 100==0:
                 print("Step", step, " epoch", i, ". train_loss: ", np.mean(losses))
                 if validation_data:
@@ -127,15 +136,17 @@ def train(config, train_data=None, validation_data=None, test_data=None,
 
     # note: if running cross-validation, the most recently saved model will
     # simply be overwritten by the current one.
-    torch.save(decoder.state_dict(),os.path.join(config.model_dir,'jointnlu-decoder.pkl'))
-    torch.save(encoder.state_dict(),os.path.join(config.model_dir, 'jointnlu-encoder.pkl'))
+    #torch.save(decoder.state_dict(),os.path.join(config.model_dir,'jointnlu-decoder.pkl'))
+    #torch.save(encoder.state_dict(),os.path.join(config.model_dir, 'jointnlu-encoder.pkl'))
+    torch.save(biRNN.state_dict(),os.path.join(config.model_dir, 'jointnlu-biRNN.pkl'))
     print("Train Complete!")
 
     if test_data is None:
         test_data = validation_data
 
     print("Evaluating on test data (or validation data if test data is not available).")
-    _, test_f1_tag_score, test_intent_accuracy = evaluate(encoder, decoder, word2index, test_data, config.batch_size)
+    #_, test_f1_tag_score, test_intent_accuracy = evaluate(encoder, decoder, word2index, test_data, config.batch_size)
+    _, test_f1_tag_score, test_intent_accuracy = evaluate(biRNN, word2index, test_data, config.batch_size)
     print("Tag F1 score: ", test_f1_tag_score, ", intent accuracy: ",
           test_intent_accuracy, "\n\n")
     
