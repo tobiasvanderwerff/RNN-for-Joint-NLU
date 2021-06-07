@@ -8,7 +8,7 @@ from torchcrf import CRF
 USE_CUDA = torch.cuda.is_available()
 
 class BiRNN(nn.Module):
-    def __init__(self, slot_size, intent_size, input_size, embedding_size, hidden_size, batch_size=16 ,n_layers=1, dropout_p =0.1, attention_bool = True):
+    def __init__(self, slot_size, intent_size, input_size, embedding_size, hidden_size, batch_size=16 ,n_layers=1, dropout_p =0.5, attention_bool = True):
         super(BiRNN, self).__init__()
         
         self.slot_size = slot_size
@@ -24,6 +24,15 @@ class BiRNN(nn.Module):
         self.embedding = nn.Embedding(input_size, embedding_size)
         self.lstm = nn.LSTM(self.embedding_size, self.hidden_size, self.n_layers, batch_first = True, bidirectional=True)
 
+        # Set forget gate bias of LSTM to 1
+        for names in self.lstm._all_weights:
+            for name in filter(lambda n: "bias" in n, names):
+                bias = getattr(self.lstm, name)
+                n = bias.size(0)
+                start, end = n // 4, n // 2
+                bias.data[start:end].fill_(1.)
+
+        self.dropout = nn.Dropout(self.dropout_p)
         self.slot_out = nn.Linear(self.hidden_size*4, self.slot_size)
         self.intent_out = nn.Linear(self.hidden_size*4, self.intent_size)
         self.attention_layer = nn.Linear(self.hidden_size * 2, 1) 
@@ -53,7 +62,7 @@ class BiRNN(nn.Module):
 
         context = torch.sum(attn_weights.unsqueeze(-1) * LSTM_hidden, dim = 1, keepdim=False)
         
-        return context 
+        return context
 
     def forward(self, input, mask):
         '''
@@ -85,12 +94,12 @@ class BiRNN(nn.Module):
 
         hiddens_and_context = torch.cat((context, hiddens), dim = -1)
 
-        slot_scores = self.slot_out(hiddens_and_context)
+        slot_scores = self.slot_out(self.dropout(hiddens_and_context))
         slot_scores = F.log_softmax(slot_scores, dim=1)
         slot_scores = slot_scores.view(input.size(0) * input.size(1), -1)
 
         intent_input = torch.mean(hiddens_and_context, dim = 1) # mean-pooling of the hidden states over seq_len
-        intent_scores = self.intent_out(intent_input)
+        intent_scores = self.intent_out(self.dropout(intent_input))
 
         return slot_scores, intent_scores
 
