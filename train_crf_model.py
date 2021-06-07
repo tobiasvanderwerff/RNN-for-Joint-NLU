@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # Model parameters
     parser.add_argument('--max_length', type=int, default=60,
                         help='max sequence length')
-    parser.add_argument('--embedding_size', type=int, default=64,
+    parser.add_argument('--embedding_size', type=int, default=128,
                         help='dimension of word embedding vectors')
     parser.add_argument('--hidden_size', type=int, default=64,
                         help='dimension of lstm hidden states')
