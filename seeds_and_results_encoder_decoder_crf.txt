@@ -1,0 +1,82 @@
+Results encoder-decoder:
+
+Seed: 0
+Tag F1 score: 0.9611811546118115, intent classification error: 0.050000000000000044
+
+Seed: 1
+Tag F1 score: 0.9620239149689991, intent classification error: 0.04431818181818181
+
+Seed: 2
+Tag F1 score: 0.9624309392265192,, intent classification error: 0.03977272727272729
+
+Seed: 3
+Tag F1 score: 0.965054359884624, intent classification error: 0.045454545454545414
+
+Seed: 4
+Tag F1 score: 0.9633362871067789, intent classification error: 0.050000000000000044
+
+Seed: 5
+Tag F1 score: 0.9657845199867124, intent classification error: 0.04659090909090913
+
+Seed: 6
+Tag F1 score: 0.9620463877483076, intent classification error: 0.04318181818181821
+
+Seed: 7
+Tag F1 score: 0.9623893805309734, intent classification error: 0.05227272727272725
+
+Seed: 8
+Tag F1 score: 0.9627006087437742, intent classification error: 0.05340909090909096
+
+Seed: 9
+Tag F1 score: 0.9608950925002769, intent classification error: 0.04886363636363633
+
+
+Summary:
+Tag F1 score Mean: 	0.9627842645308776
+Tag F1 score StDev: 0.0014835393844042314
+
+Intent classification error Mean:  0.04738636363636365
+Intent classification error StDev: 0.0040671659473121135
+
+
+
+
+Results encoder-decoder + CRF:
+
+Seed: 0
+Tag F1 score: 0.973457199734572, intent classification error: 0.051136363636363646
+
+Seed: 1
+Tag F1 score: 0.9746457041629761, intent classification error: 0.060227272727272685
+
+Seed: 2
+Tag F1 score: 0.9733701657458563,, intent classification error: 0.05340909090909096
+
+Seed: 3
+Tag F1 score: 0.9740403816285778, intent classification error: 0.055681818181818166
+
+Seed: 4
+Tag F1 score: 0.9768498006202925, intent classification error: 0.06477272727272732
+
+Seed: 5
+Tag F1 score: 0.9719853836784409, intent classification error: 0.054545454545454564
+
+Seed: 6
+Tag F1 score: 0.9712573521251804, intent classification error: 0.0625
+
+Seed: 7
+Tag F1 score: 0.9730088495575221, intent classification error: 0.05681818181818177
+
+Seed: 8
+Tag F1 score: 0.9729939125622579, intent classification error: 0.040909090909090895
+
+Seed: 9
+Tag F1 score: 0.9734130940511798, intent classification error: 0.07272727272727275
+
+
+Summary:
+Tag F1 score Mean: 	0.9735021843866856
+Tag F1 score StDev: 0.0014378071358074425
+
+Intent classification error Mean:  0.057272727272727274
+Intent classification error StDev: 0.008134331894624225
