@@ -1,0 +1,39 @@
+Results BiRNN:
+
+Seed: 1337
+Tag F1 score: 96.93, intent accuracy:  96.14
+
+Seed: 1729
+Tag F1 score:  97.06 , intent accuracy:  95.23
+
+Seed: 3
+Tag F1 score:  96.90, intent accuracy:  94.32
+
+Seed: 666
+Tag F1 score:  96.87 , intent accuracy:  94.77
+
+Seed: 691
+Tag F1 score:  96.44 , intent accuracy:  95.00
+
+Seed: 163
+Tag F1 score:  96.82, intent accuracy:  94.55
+
+Seed: 78557 
+Tag F1 score:  96.82 , intent accuracy:  94.89
+
+Seed: 909
+Tag F1 score:  97.03 , intent accuracy:  94.77
+
+Seed: 808
+Tag F1 score:  96.53 , intent accuracy:  95.68
+
+Seed: 12321
+Tag F1 score:  96.82, intent accuracy:  95.11
+
+Summary:
+Tag F1 score Mean: 	96.82
+Tag F1 score StDev: 0.20
+
+Intent accuracy Mean:  95.05
+Intent accuracy StDev: 0.54
+
