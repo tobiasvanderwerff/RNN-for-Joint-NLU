@@ -6,14 +6,17 @@ Pytorch implementation of "Attention-Based Recurrent Neural Network Models for J
 
 Intent prediction and slot filling are performed in two branches based on Encoder-Decoder model.
 
-## dataset (Atis)
+## Dataset (Atis)
 
-You can get data from <a href="https://github.com/yvchen/JointSLU/tree/master/data ">here</a>
-
+You can get the data from <a href="https://github.com/yvchen/JointSLU/tree/master/data ">here</a>
 
 ## Requirements
 
-* `Pytorch 0.2`
+Install the requirements:
+
+```
+pip install -r requirements.txt
+```
 
 ## Train
 
