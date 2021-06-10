@@ -1,0 +1,209 @@
+DEFAULT SEED 1234
+
+
+06/04/2021 19:37:43 - INFO - trainer -   ***** Model Loaded *****
+06/04/2021 19:37:43 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/04/2021 19:37:43 - INFO - trainer -     Num examples = 893
+06/04/2021 19:37:43 - INFO - trainer -     Batch size = 64
+Evaluating: 100% 14/14 [02:09<00:00,  9.25s/it]
+06/04/2021 19:39:53 - INFO - trainer -   ***** Eval results *****
+06/04/2021 19:39:53 - INFO - trainer -     intent_acc = 0.9809630459126539
+06/04/2021 19:39:53 - INFO - trainer -     loss = 0.259287442745907
+06/04/2021 19:39:53 - INFO - trainer -     sementic_frame_acc = 0.8779395296752519
+06/04/2021 19:39:53 - INFO - trainer -     slot_f1 = 0.9543859649122807
+06/04/2021 19:39:53 - INFO - trainer -     slot_precision = 0.9507165326808809
+06/04/2021 19:39:53 - INFO - trainer -     slot_recall = 0.9580838323353293
+
+
+SEED 0
+
+
+06/08/2021 13:29:29 - INFO - trainer -   ***** Model Loaded *****
+06/08/2021 13:29:29 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/08/2021 13:29:29 - INFO - trainer -     Num examples = 893
+06/08/2021 13:29:29 - INFO - trainer -     Batch size = 64
+Evaluating: 100% 14/14 [02:16<00:00,  9.74s/it]
+06/08/2021 13:31:45 - INFO - trainer -   ***** Eval results *****
+06/08/2021 13:31:45 - INFO - trainer -     intent_acc = 0.9742441209406495
+06/08/2021 13:31:45 - INFO - trainer -     loss = 0.2928499821573496
+06/08/2021 13:31:45 - INFO - trainer -     sementic_frame_acc = 0.8801791713325868
+06/08/2021 13:31:45 - INFO - trainer -     slot_f1 = 0.9557584269662922
+06/08/2021 13:31:45 - INFO - trainer -     slot_precision = 0.9527476373818691
+06/08/2021 13:31:45 - INFO - trainer -     slot_recall = 0.9587883057414582
+
+
+SEED 1
+
+
+06/08/2021 11:09:54 - INFO - trainer -   ***** Model Loaded *****
+06/08/2021 11:09:54 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/08/2021 11:09:54 - INFO - trainer -     Num examples = 893
+06/08/2021 11:09:54 - INFO - trainer -     Batch size = 64
+Evaluating: 100%|███████████████████████████████| 14/14 [01:44<00:00,  7.46s/it]
+06/08/2021 11:11:39 - INFO - trainer -   ***** Eval results *****
+06/08/2021 11:11:39 - INFO - trainer -     intent_acc = 0.9742441209406495
+06/08/2021 11:11:39 - INFO - trainer -     loss = 0.29063355683216024
+06/08/2021 11:11:39 - INFO - trainer -     sementic_frame_acc = 0.8745800671892497
+06/08/2021 11:11:39 - INFO - trainer -     slot_f1 = 0.9560323601829054
+06/08/2021 11:11:39 - INFO - trainer -     slot_precision = 0.9546891464699684
+06/08/2021 11:11:39 - INFO - trainer -     slot_recall = 0.9573793589292005
+
+
+
+
+SEED 2
+
+
+06/09/2021 01:46:19 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 01:46:19 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 01:46:19 - INFO - trainer -     Num examples = 893
+06/09/2021 01:46:19 - INFO - trainer -     Batch size = 64
+Evaluating: 100% 14/14 [02:13<00:00,  9.56s/it]
+06/09/2021 01:48:33 - INFO - trainer -   ***** Eval results *****
+06/09/2021 01:48:33 - INFO - trainer -     intent_acc = 0.9776035834266518
+06/09/2021 01:48:33 - INFO - trainer -     loss = 0.27266616454081877
+06/09/2021 01:48:33 - INFO - trainer -     sementic_frame_acc = 0.8801791713325868
+06/09/2021 01:48:33 - INFO - trainer -     slot_f1 = 0.9563994374120957
+06/09/2021 01:48:33 - INFO - trainer -     slot_precision = 0.9547209547209548
+06/09/2021 01:48:33 - INFO - trainer -     slot_recall = 0.9580838323353293
+<Figure size 1200x600 with 1 Axes>
+
+
+
+
+SEED 3
+
+
+06/08/2021 16:50:10 - INFO - trainer -   ***** Model Loaded *****
+06/08/2021 16:50:10 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/08/2021 16:50:10 - INFO - trainer -     Num examples = 893
+06/08/2021 16:50:10 - INFO - trainer -     Batch size = 64
+Evaluating: 100%|███████████████████████████████| 14/14 [01:47<00:00,  7.64s/it]
+06/08/2021 16:51:57 - INFO - trainer -   ***** Eval results *****
+06/08/2021 16:51:57 - INFO - trainer -     intent_acc = 0.9764837625979843
+06/08/2021 16:51:57 - INFO - trainer -     loss = 0.29319445017193047
+06/08/2021 16:51:57 - INFO - trainer -     sementic_frame_acc = 0.8745800671892497
+06/08/2021 16:51:57 - INFO - trainer -     slot_f1 = 0.9543057996485061
+06/08/2021 16:51:57 - INFO - trainer -     slot_precision = 0.9522974394949141
+06/08/2021 16:51:57 - INFO - trainer -     slot_recall = 0.9563226488200071
+
+
+
+
+SEED 4
+
+
+06/09/2021 07:10:15 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 07:10:15 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 07:10:15 - INFO - trainer -     Num examples = 893
+06/09/2021 07:10:15 - INFO - trainer -     Batch size = 64
+Evaluating:   0% 0/14 [00:00<?, ?it/s]06/09/2021 07:10:15 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 07:10:15 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 07:10:15 - INFO - trainer -     Num examples = 893
+06/09/2021 07:10:15 - INFO - trainer -     Batch size = 64
+Evaluating: 100% 14/14 [01:29<00:00,  6.40s/it]
+Evaluating: 100% 14/14 [01:29<00:00,  6.40s/it]
+06/09/2021 07:11:45 - INFO - trainer -   ***** Eval results *****
+06/09/2021 07:11:45 - INFO - trainer -     intent_acc = 0.9776035834266518
+06/09/2021 07:11:45 - INFO - trainer -     loss = 0.289867602288723
+06/09/2021 07:11:45 - INFO - trainer -     sementic_frame_acc = 0.8756998880179171
+06/09/2021 07:11:45 - INFO - trainer -     slot_f1 = 0.9551924090669478
+06/09/2021 07:11:45 - INFO - trainer -     slot_precision = 0.9530154277699859
+06/09/2021 07:11:45 - INFO - trainer -     slot_recall = 0.9573793589292005
+<Figure size 1200x600 with 1 Axes>
+06/09/2021 07:11:45 - INFO - trainer -   ***** Eval results *****
+06/09/2021 07:11:45 - INFO - trainer -     intent_acc = 0.9776035834266518
+06/09/2021 07:11:45 - INFO - trainer -     loss = 0.289867602288723
+06/09/2021 07:11:45 - INFO - trainer -     sementic_frame_acc = 0.8756998880179171
+06/09/2021 07:11:45 - INFO - trainer -     slot_f1 = 0.9551924090669478
+06/09/2021 07:11:45 - INFO - trainer -     slot_precision = 0.9530154277699859
+06/09/2021 07:11:45 - INFO - trainer -     slot_recall = 0.9573793589292005
+
+
+SEED 5
+
+
+06/08/2021 22:31:32 - INFO - trainer -   ***** Model Loaded *****
+06/08/2021 22:31:32 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/08/2021 22:31:32 - INFO - trainer -     Num examples = 893
+06/08/2021 22:31:32 - INFO - trainer -     Batch size = 64
+Evaluating: 100%|███████████████████████████████| 14/14 [01:47<00:00,  7.65s/it]
+06/08/2021 22:33:19 - INFO - trainer -   ***** Eval results *****
+06/08/2021 22:33:19 - INFO - trainer -     intent_acc = 0.9720044792833147
+06/08/2021 22:33:19 - INFO - trainer -     loss = 0.29347177914210726
+06/08/2021 22:33:19 - INFO - trainer -     sementic_frame_acc = 0.8712206047032475
+06/08/2021 22:33:19 - INFO - trainer -     slot_f1 = 0.9529494382022472
+06/08/2021 22:33:19 - INFO - trainer -     slot_precision = 0.9499474973748687
+06/08/2021 22:33:19 - INFO - trainer -     slot_recall = 0.9559704121169426
+
+
+
+
+SEED 6
+
+
+06/09/2021 16:00:29 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 16:00:29 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 16:00:29 - INFO - trainer -     Num examples = 893
+06/09/2021 16:00:29 - INFO - trainer -     Batch size = 64
+Evaluating: 100% 14/14 [02:10<00:00,  9.30s/it]
+06/09/2021 16:02:39 - INFO - trainer -   ***** Eval results *****
+06/09/2021 16:02:39 - INFO - trainer -     intent_acc = 0.9776035834266518
+06/09/2021 16:02:39 - INFO - trainer -     loss = 0.2661923076957464
+06/09/2021 16:02:39 - INFO - trainer -     sementic_frame_acc = 0.8734602463605823
+06/09/2021 16:02:39 - INFO - trainer -     slot_f1 = 0.9550087873462215
+06/09/2021 16:02:39 - INFO - trainer -     slot_precision = 0.9529989477376359
+06/09/2021 16:02:39 - INFO - trainer -     slot_recall = 0.957027122226136
+
+
+SEED 7
+
+
+06/09/2021 04:17:45 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 04:17:45 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 04:17:45 - INFO - trainer -     Num examples = 893
+06/09/2021 04:17:45 - INFO - trainer -     Batch size = 64
+Evaluating: 100%|███████████████████████████████| 14/14 [01:40<00:00,  7.15s/it]
+06/09/2021 04:19:25 - INFO - trainer -   ***** Eval results *****
+06/09/2021 04:19:25 - INFO - trainer -     intent_acc = 0.9764837625979843
+06/09/2021 04:19:25 - INFO - trainer -     loss = 0.293095142979707
+06/09/2021 04:19:25 - INFO - trainer -     sementic_frame_acc = 0.8756998880179171
+06/09/2021 04:19:25 - INFO - trainer -     slot_f1 = 0.9551924090669478
+06/09/2021 04:19:25 - INFO - trainer -     slot_precision = 0.9530154277699859
+06/09/2021 04:19:25 - INFO - trainer -     slot_recall = 0.9573793589292005
+
+
+SEED 8
+06/09/2021 18:23:45 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 18:23:45 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 18:23:45 - INFO - trainer -     Num examples = 893
+06/09/2021 18:23:45 - INFO - trainer -     Batch size = 64
+Evaluating: 100%|█████████████████████████████████| 14/14 [02:08<00:00,  9.19s/it]
+06/09/2021 18:25:54 - INFO - trainer -   ***** Eval results *****
+06/09/2021 18:25:54 - INFO - trainer -     intent_acc = 0.9764837625979843
+06/09/2021 18:25:54 - INFO - trainer -     loss = 0.30078313845608917
+06/09/2021 18:25:54 - INFO - trainer -     sementic_frame_acc = 0.8745800671892497
+06/09/2021 18:25:54 - INFO - trainer -     slot_f1 = 0.9552395997893628
+06/09/2021 18:25:54 - INFO - trainer -     slot_precision = 0.9520643806857942
+06/09/2021 18:25:54 - INFO - trainer -     slot_recall = 0.9584360690383938
+
+
+
+
+
+
+SEED 9
+06/09/2021 11:12:21 - INFO - trainer -   ***** Model Loaded *****
+06/09/2021 11:12:21 - INFO - trainer -   ***** Running evaluation on test dataset *****
+06/09/2021 11:12:21 - INFO - trainer -     Num examples = 893
+06/09/2021 11:12:21 - INFO - trainer -     Batch size = 64
+Evaluating: 100%|███████████████████████████████| 14/14 [01:41<00:00,  7.26s/it]
+06/09/2021 11:14:03 - INFO - trainer -   ***** Eval results *****
+06/09/2021 11:14:03 - INFO - trainer -     intent_acc = 0.975363941769317
+06/09/2021 11:14:03 - INFO - trainer -     loss = 0.288906691595912
+06/09/2021 11:14:03 - INFO - trainer -     sementic_frame_acc = 0.8701007838745801
+06/09/2021 11:14:03 - INFO - trainer -     slot_f1 = 0.9544735454385657
+06/09/2021 11:14:03 - INFO - trainer -     slot_precision = 0.9526315789473684
+06/09/2021 11:14:03 - INFO - trainer -     slot_recall = 0.9563226488200071
+
+
